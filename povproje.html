@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>KAYÜ POV Display Presentation Deck</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #001f3f;
+            color: #ffffff;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        .slide {
+            width: 297mm;
+            height: 210mm;
+            page-break-after: always;
+            position: relative;
+            padding: 22mm 25mm 20mm 25mm;
+            background-color: #001f3f;
+            overflow: hidden;
+        }
+        
+        /* Slide Title */
+        .slide-title {
+            font-size: 26pt;
+            font-weight: bold;
+            color: #ffd700;
+            border-left: 5mm solid #ffd700;
+            padding-left: 5mm;
+            margin-bottom: 12mm;
+            line-height: 1.2;
+        }
+        
+        /* Layout structures via display: table */
+        .table-layout {
+            display: table;
+            width: 100%;
+        }
+        .table-row {
+            display: table-row;
+        }
+        .left-col-40 {
+            display: table-cell;
+            width: 40%;
+            vertical-align: top;
+            padding-right: 12mm;
+            border-right: 1px dashed rgba(255, 215, 0, 0.2);
+        }
+        .right-col-60 {
+            display: table-cell;
+            width: 60%;
+            vertical-align: top;
+            padding-left: 12mm;
+        }
+        .col-50 {
+            display: table-cell;
+            width: 50%;
+            vertical-align: top;
+            padding: 0 6mm;
+        }
+        .col-33 {
+            display: table-cell;
+            width: 33.33%;
+            vertical-align: top;
+            padding: 0 5mm;
+        }
+        
+        /* Decorative Elements */
+        .highlight-box {
+            background-color: rgba(255, 215, 0, 0.05);
+            border-left: 4px solid #ffd700;
+            padding: 6mm;
+            font-size: 13pt;
+            color: #daffde;
+            line-height: 1.5;
+            margin-top: 8mm;
+            border-radius: 4px;
+        }
+        .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5mm;
+            border-radius: 8px;
+            border-left: 3px solid #ffd700;
+            margin-bottom: 5mm;
+        }
+        .info-card h4 { 
+            color: #ffd700; 
+            margin: 0 0 2mm 0; 
+            font-size: 15pt; 
+        }
+        .info-card p { 
+            font-size: 11pt; 
+            color: rgba(255,255,255,0.85); 
+            line-height: 1.4;
+            margin: 0;
+        }
+        
+        /* Lists and Bullets */
+        .bullet-table {
+            display: table;
+            width: 100%;
+            margin-bottom: 6mm;
+        }
+        .bullet-icon {
+            display: table-cell;
+            width: 10mm;
+            font-size: 18pt;
+            color: #ffd700;
+            vertical-align: top;
+            font-weight: bold;
+        }
+        .bullet-text {
+            display: table-cell;
+            vertical-align: top;
+        }
+        .bullet-text h3 {
+            font-size: 15pt;
+            color: #ffffff;
+            margin: 0 0 2mm 0;
+            font-weight: bold;
+        }
+        .bullet-text p {
+            font-size: 11pt;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.4;
+            margin: 0;
+        }
+        
+        /* Errors and Solutions */
+        .error-card {
+            background-color: rgba(239, 68, 68, 0.04);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-left: 4px solid #ef4444;
+            padding: 4mm;
+            margin-bottom: 5mm;
+            border-radius: 6px;
+        }
+        .error-title {
+            color: #ef4444;
+            font-weight: bold;
+            font-size: 13pt;
+            margin-bottom: 1mm;
+        }
+        .solution-title {
+            color: #10b981;
+            font-weight: bold;
+            font-size: 12pt;
+            margin-top: 2mm;
+            margin-bottom: 1mm;
+        }
+        
+        /* Math */
+        .formula-container {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4mm;
+            border-radius: 6px;
+            margin: 4mm 0;
+            border-left: 3px solid #ffd700;
+            text-align: center;
+        }
+        .math {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            font-weight: bold;
+            font-size: 15pt;
+            color: #daffde;
+        }
+        
+        /* Code Box */
+        .code-window {
+            background: #000d1a;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            padding: 5mm;
+            font-family: 'Courier New', monospace;
+            font-size: 10pt;
+            line-height: 1.35;
+            color: #daffde;
+            white-space: pre;
+            overflow: hidden;
+        }
+        
+        /* Footer */
+        .slide-footer {
+            position: absolute;
+            bottom: 8mm;
+            left: 25mm;
+            right: 25mm;
+            font-size: 10pt;
+            color: rgba(255, 255, 255, 0.3);
+            border-top: 1px solid rgba(255, 215, 0, 0.1);
+            padding-top: 3mm;
+        }
+        .float-left { float: left; }
+        .float-right { float: right; }
+        .clear { clear: both; }
+        
+        /* Cover Slide Specifics */
+        .cover-layout {
+            text-align: center;
+            padding-top: 35mm;
+        }
+        .cover-layout h1 {
+            font-size: 44pt;
+            color: #ffd700;
+            margin: 0 0 4mm 0;
+            letter-spacing: 1px;
+        }
+        .cover-layout .line {
+            width: 40mm;
+            height: 1mm;
+            background-color: #ffd700;
+            margin: 0 auto 6mm auto;
+        }
+        .cover-layout .subtitle {
+            font-size: 16pt;
+            color: #daffde;
+            max-width: 200mm;
+            margin: 0 auto 15mm auto;
+            line-height: 1.4;
+        }
+        .cover-layout .author {
+            font-size: 14pt;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SLAYT 1: KAPAK -->
+    <div class="slide">
+        <div class="cover-layout">
+            <p style="font-size: 12pt; letter-spacing: 5px; color: #ffd700; font-weight: bold; margin-bottom: 4mm;">MEKATRONİK PROJE SUNUMU</p>
+            <h1>KAYÜ POV DISPLAY</h1>
+            <div class="line"></div>
+            <p class="subtitle">Arduino Nano ile Persistence of Vision Teknolojisi ve Akıllı Görüntüleme Sistemi Üzerine Mühendislik Yaklaşımı</p>
+            <p class="author">Hazırlayan: <strong>Tayfun Yerlikaya</strong></p>
+            <p style="font-size: 11pt; color: rgba(255,255,255,0.6); margin-top: 2mm;">Kayseri Üniversitesi TBMYO - Makine ve Metal Teknolojileri Bölümü</p>
+        </div>
+        <div class="slide-footer">
+            <div class="float-left">KAYÜ - Mekatronik Bölümü</div>
+            <div class="float-right">Slayt 1 / 13</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <!-- SLAYT 2: POV TEORİSİ -->
+    <div class="slide">
+        <div class="slide-title">POV Teorisi ve Projenin Amacı</div>
+        <div class="table-layout">
+            <div class="table-row">
+                <div class="left-col-40">
+                    <div class="highlight-box">
+                        "İnsan gözünün retinası, anlık ışık uyarılarını yaklaşık 10-16 milisaniye boyunca hafızasında tutar. Bu süre içinde ardışık gelen görüntüler, beyinde kesintisiz bir bütün olarak algılanır."
+                    </div>
+                </div>
+                <div class="right-col-60">
+                    <div class="bullet-table">
+                        <div class="bullet-icon">✓</div>
+                        <div class="bullet-text">
+                            <h3>Ağtabaka İzi (Retinal Persistence)</h3>
+                            <p>Tek kollu bir LED çubuğun yüksek hızda döndürülmesiyle, uzaydaki farklı açısal koordinatlarda mikro saniyelerle yakılıp söndürülen LED'lerin havada iki boyutlu kararlı bir ekran oluşturması hedeflenmiştir.</p>
+                        </div>
+                    </div>
+                    <div class="bullet-table">
+                        <div class="bullet-icon">✓</div>
+                        <div class="bullet-text">
+                            <h3>Yüksek Yenileme Hızı ve Dinamik Senkronizasyon</h3>
+                            <p>Motorun dönüş hızı temel alınarak zamanı dinamik şekilde bölmek, görüntünün havada kaymasını veya titremesini önlemek projenin temel mühendislik çıktısıdır.</p>
+                        </div>
+                    </div>
+                    <div class="bullet-table">
+                        <div class="bullet-icon">✓</div>
+                        <div class="bullet-text">
+                            <h3>Hedeflenen Çıktı</h3>
+                            <p>Mekanik dönme hareketini mikrodenetleyici tabanlı hassas zamanlama algoritmalarıyla birleştirerek minimum donanımla düşük maliyetli, yüksek çözünürlüklü asimetrik görsel ve metin displayi elde etmek.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="float-left">KAYÜ - Mekatronik Bölümü</div>
+            <div class="float-right">Slayt 2 / 13</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <!-- SLAYT 3: DONANIM SEÇİMİ -->
+    <div class="slide">
+        <div class="slide-title">Donanım Bileşenleri ve Elektriksel Mimari</div>
+        <div class="table-layout">
+            <div class="table-row">
+                <div class="left-col-40">
+                    <div class="highlight-box">
+                        "Sistem, yüksek hızda dönen dinamik bir platform olduğu için bileşenlerin hafifliği, akım kapasitesi ve besleme kararlılığı kritik birer tasarım parametresi olarak ele alınmıştır."
+                    </div>
+                </div>
+                <div class="right-col-60">
+                    <div class="bullet-table">
+                        <div class="bullet-icon">■</div>
+                        <div class="bullet-text">
+                            <h3>Kontrolcü ve Algılama Grubu</h3>
+                            <p><strong>Arduino Nano (ATmega328P):</strong> Hafif formu ve donanımsal kesme desteği için seçildi.<br><strong>A3144 Hall Effect Sensörü:</strong> Temassız devir ölçümü için D2 (INT0) pinine konumlandırıldı.</p>
+                        </div>
+                    </div>
+                    <div class="bullet-table">
+                        <div class="bullet-icon">■</div>
+                        <div class="bullet-text">
+                            <h3>Görsel Çıkış Elemanı</h3>
+                            <p><strong>16'lı WS2812B NeoPixel LED Çubuğu:</strong> Her pikselin bağımsız RGB kontrolü, tek bir data hattı üzerinden D7 pini vasıtasıyla yüksek hızda (800 kHz) gerçekleştirilir.</p>
+                        </div>
+                    </div>
+                    <div class="bullet-table">
+                        <div class="bullet-icon">■</div>
+                        <div class="bullet-text">
+                            <h3>Güç Yönetimi ve Regülasyon Sub-Sistemi</h3>
+                            <p><strong>2000mAh Li-Po Batarya:</strong> Sisteme yüksek akım deşarj kapasitesi sağlar.<br><strong>MT3608 DC-DC Step-Up Dönüştürücü:</strong> Hücre gerilimini 5.13V seviyesine regüle ederek, 16 LED'in anlık yüksek akım çekimlerinde Arduino'nun reset atmasını (Brown-out) engeller.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="float-left">KAYÜ - Mekatronik Bölümü</div>
+            <div class="float-right">Slayt 3 / 13</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <!-- SLAYT 4: BLOK DİYAGRAMI -->
+    <div class="slide">
+        <div class="slide-title">Sistem Mimarisi ve Blok Diyagramı</div>
+        <div class="table-layout">
+            <div class="table-row">
+                <div class="col-50">
+                    <div class="info-card">
+                        <h4>⚡ Güç Dağıtım Hattı</h4>
+                        <p>Li-Po Batarya (3.7V - 4.2V) ana enerji kaynağıdır. MT3608 Step-Up ünitesi gerilimi 5.13V'a yükseltir. Tüm bileşenler paralel olarak regüleli hattan beslenir.</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>📡 Veri ve Sinyal Akışı</h4>
+                        <p><strong>Girdi:</strong> Hall Sensör mıknatısı algıladığında D2 pinine "Düşen Kenar" sinyali gönderir.<br><strong>İşlem:</strong> Arduino Nano iki sinyal arası süreyi ölçerek devir süresini hesaplar.<br><strong>Çıktı:</strong> Hesaplanan zaman dilimlerine göre D7 pini üzerinden 800kHz hızla LED verisi iletilir.</p>
+                    </div>
+                </div>
+                <div class="col-50" style="padding-top: 2mm;">
+                    <table style="width:100%; border-collapse: separate; border-spacing: 8px; font-size: 11pt; color: #ffffff;">
+                        <tr>
+                            <td colspan="2" style="background: rgba(255,255,255,0.05); border: 1px solid #ef4444; padding: 10px; text-align: center; border-radius: 6px; font-weight: bold; color: #ef4444;">
+                                Li-Po Batarya (3.7V - 4.2V)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: center; color: #ffd700; font-size: 12pt; padding: 0;">↓ Gerilim Yükseltme</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="background: rgba(255,255,255,0.05); border: 1px solid #10b981; padding: 10px; text-align: center; border-radius: 6px; font-weight: bold; color: #10b981;">
+                                MT3608 Step-Up Regülatör (Sabit 5.13V)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; color: #ffd700; font-size: 12pt; width: 50%; padding: 0;">↓ Besleme</td>
+                            <td style="text-align: center; color: #ffd700; font-size: 12pt; width: 50%; padding: 0;">↓ Besleme</td>
+                        </tr>
+                        <tr>
+                            <td style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 12px; text-align: center; border-radius: 6px; font-weight: bold;">
+                                Arduino Nano (Kontrolcü)
+                            </td>
+                            <td style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 12px; text-align: center; border-radius: 6px; font-weight: bold;">
+                                WS2812B NeoPixel LED (Yük)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; color: #ffd700; font-size: 11pt; padding: 0;">↑ Giriş (Pin D2 Kesme)</td>
+                            <td style="text-align: center; color: #ffd700; font-size: 11pt; padding: 0;">↑ Çıkış (Pin D7 Data)</td>
+                        </tr>
+                        <tr>
+                            <td style="background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,215,0,0.4); padding: 8px; text-align: center; border-radius: 6px; font-size: 10pt;">
+                                A3144 Hall Effect Sensörü
+                            </td>
+                            <td style="background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,215,0,0.4); padding: 8px; text-align: center; border-radius: 6px; font-size: 10pt;">
+                                Havada Tarama (POV Görüntü)
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="float-left">KAYÜ - Mekatronik Bölümü</div>
+            <div class="float-right">Slayt 4 / 13</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <!-- SLAYT 5: DONANIMSAL HATALAR VE MÜHENDİSLİK DERSLERİ -->
+    <div class="slide">
+        <div class="slide-title">Prototipleme Süreci ve Mühendislik Dersleri</div>
+        <div class="table-layout">
+            <div class="table-row">
+                <div class="left-col-40">
+                    <div class="highlight-box">
+                        "Mühendislikte teorik tasarım ile fiziksel uygulama arasındaki farklar, pratik prototipleme aşamasında yapılan hata analizleriyle kapatılır."
+                    </div>
+                </div>
+                <div class="right-col-60">
+                    <div class="error-card">
+                        <div class="error-title">⚠️ 1. Yükseltici Kart Sükunet Akımı ve Derin Deşarj</div>
+                        <p style="font-size:10.5pt; color:rgba(255,255,255,0.95);"><strong>Hata:</strong> Bataryanın regülatöre kalıcı bağlı bırakılması, boşta çekilen akım yüzünden pilin derin deşarja uğramasına neden olmuştur.<br>
+                        <span style="color:#10b981;"><strong>Mühendislik Çözümü:</strong></span> Batarya ile regülatör girişi arasına fiziksel anahtar (Switch) eklenerek parazitik akım sıfırlanmıştır.</p>
+                    </div>
+                    <div class="error-card">
+                        <div class="error-title">⚠️ 2. Zamanlama Hassasiyeti ve Yanlış Pin Seçimi</div>
+                        <p style="font-size:10.5pt; color:rgba(255,255,255,0.95);"><strong>Hata:</strong> Hall sensörünün donanımsal kesme özelliği olmayan D7 pinine bağlanması, mikrosaniyelik yüksek dönüş hızlarında sinyal kaçırma problemine yol açmıştır.<br>
+                        <span style="color:#10b981;"><strong>Mühendislik Çözümü:</strong></span> Sensör hattı harici kesme destekleyen <strong>D2 (INT0)</strong> pinine taşınmış ve kararlı devir ölçümü kurulmuştur.</p>
+                    </div>
+                    <div class="error-card">
+                        <div class="error-title">⚠️ 3. Çizgisel Hız Değişimi ve Radyal Hizalama</div>
+                        <p style="font-size:10.5pt; color:rgba(255,255,255,0.95);"><strong>Hata:</strong> Piksellerin motor merkezine yakın konumlandırılması, çizgisel hızın düşük olması sebebiyle havada yazının sıkışmasına ve biçimsizleşmesine yol açmıştır.<br>
+                        <span style="color:#10b981;"><strong>Mühendislik Çözümü:</strong></span> Yazım alanı, çizgisel hızın en yüksek olduğu <strong>pervanenin en uç kısmındaki (0-7 arası)</strong> piksellere yazılımsal olarak kaydırılmıştır.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="float-left">KAYÜ - Mekatronik Bölümü</div>
+            <div class="float-right">Slayt 5 / 13</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <!-- SLAYT 6: YAZILIM ALGORİTMASI -->
+    <div class="slide">
+        <div class="slide-title">Yazılım Algoritması ve Hesaplamalar</div>
+        <div class="table-layout">
+            <div class="table-row">
+                <div class="col-50">
+                    <div class="info-card" style="height: 115mm;">
+                        <h4>⚙ Kesme Tabanlı Algılama</h4>
+                        <p>Arduino, normal döngüsünden bağımsız olarak Hall sensöründen gelen her <strong>Düşen Kenar (FALLING)</strong> sinyalinde tur süresini mikrosaniye hassasiyetinde ölçer.</p>
+                        <div class="formula-container">
+                            <span class="math">T = t<sub>geçerli</sub> - t<sub>önceki</sub></span>
+                        </div>
+                        <p style="font-size: 10pt; color: #ffd700; margin-top: 3mm;">Burada T, pervanenin bir tam turunu tamamlama süresini ifade eder.</p>
+                    </div>
+                </div>
+                <div class="col-50">
+                    <div class="info-card" style="height: 115mm;">
+                        <h4>🧭 Uzaysal Dilimleme Modeli</h4>
+                        <p>Ekran kararlılığı için 360 derecelik dönme alanı, yazılımsal olarak eşit zaman dilimlerine bölünür. Her dilim, havada bir piksel sütununa denk gelir.</p>
+                        <div class="formula-container">
+                            <span class="math">Dilim Süresi = T / N</span>
+                        </div>
+                        <p style="font-size: 10pt; color: #ffd700; margin-top: 3mm;">N değeri arttıkça havadaki yatay çözünürlük artar (Projelerimizde N = 100 veya 120 taban alınmıştır).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="float-left">KAYÜ - Mekatronik Bölümü</div>
+            <div class="float-right">Slayt 6 / 13</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <!-- SLAYT 7: NEOPIXEL HIZ SINIRI -->
+    <div class="slide">
+        <div class="slide-title">Yazılımsal Darboğaz: NeoPixel Hız Sınırı</div>
+        <div class="table-layout">
+            <div class="table-row">
+                <div class="col-50">
+                    <div class="error-card" style="background-color: rgba(239, 68, 68, 0.08); border-color:#ef4444;">
+                        <div class="error-title">⚡ Donanımsal Veri Sınırı Engeli</div>
+                        <p style="font-size:11pt;">WS2812B LED'ler 800kHz protokolüyle çalışır. 16 LED'lik bir dizinin renk verisini güncellemek (<code>show()</code> komutu) yaklaşık <strong>500-600 µs</strong> vakit alır. Yüksek devirlerde bu süre, hesaplanan bir tur diliminden daha uzun sürer ve verinin çökmesine neden olur.</p>
+                    </div>
+                    <div class="info-card" style="border-left-color: #10b981; background: rgba(16, 185, 129, 0.05);">
+                        <h4 style="color:#10b981;">💡 Sequential Burst Algoritması Çözümü</h4>
+                        <p style="font-size:11pt;">İşlemcinin donanım hızını aşmaya çalışıp görüntüyü bozmasını engellemek için, veriler "Burst" (Ardışık) olarak, donanım alt sınırına (600 µs) yazılımsal koruma eklenerek peş peşe basılır.</p>
+                    </div>
+                </div>
+                <div class="col-50">
+                    <div class="code-window" style="font-size: 9pt; height:110mm;">// Donanım Alt Sınır Koruması
+unsigned long sutunSuresi = turSuresi / 100;
+if (sutunSuresi &lt; 600) sutunSuresi = 600;
+
+// Ardışık Çakma Döngüsü (Burst)
+for (int s = 0; s &lt; 5; s++) {
+  byte sutunVerisi = harfler[h][s];
+  pixels.clear();
+  // Piksel basma işlemleri...
+  pixels.show(); // Tam 500us sürer
+  guvenliDelayMicros(sutunSuresi);
+}</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="float-left">KAYÜ - Mekatronik Bölümü</div>
+            <div class="float-right">Slayt 7 / 13</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <!-- SLAYT 8: GELİŞTİRİLEN GÖRSEL MODLAR -->
+    <div class="slide">
+        <div class="slide-title">Geliştirilen Görsel Modlar</div>
+        <div class="table-layout" style="margin-top: 5mm;">
+            <div class="table-row">
+                <div class="col-33">
+                    <div class="info-card" style="height: 100mm; text-align: center; padding-top: 8mm;">
+                        <span style="font-size: 32pt; color: #ffd700;">🔤</span>
+                        <h4 style="margin-top:4mm; font-size:16pt;">KAYÜ Metin Modu</h4>
+                        <p style="margin-top:3mm; font-size:11pt;">Harf matrislerinin dikeyde takla attırılarak pervanenin dış ucuna hizalandığı moddur. Her harf için kurumsal renk paleti atanmıştır.</p>
+                    </div>
+                </div>
+                <div class="col-33">
+                    <div class="info-card" style="height: 100mm; text-align: center; padding-top: 8mm;">
+                        <span style="font-size: 32pt; color: #ffd700;">🌀</span>
+                        <h4 style="margin-top:4mm; font-size:16pt;">3D Vortex Efekti</h4>
+                        <p style="margin-top:3mm; font-size:11pt;">Matematiksel gradyan geçişleriyle oluşturulan, havada derinlik algısı yaratan animasyondur. Renklerin faz kaymalarıyla girdap deseni oluşturulur.</p>
+                    </div>
+                </div>
+                <div class="col-33">
+                    <div class="info-card" style="height: 100mm; text-align: center; padding-top: 8mm;">
+                        <span style="font-size: 32pt; color: #ffd700;">📊</span>
+                        <h4 style="margin-top:4mm; font-size:16pt;">Dijital Ekolayzır</h4>
+                        <p style="margin-top:3mm; font-size:11pt;">Rastgele ritim motoru tabanlı dinamik spektrum simülasyonudur. Havada 12 dilimlik grafik sunar; renkler seviyeye göre değişir.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p style="text-align: center; font-style: italic; color: #ffd700; font-size: 13pt; margin-top: 5mm;">
+            "EEPROM entegrasyonu sayesinde her batarya bağlantısında bir sonraki moda otomatik geçiş sağlanmaktadır."
+        </p>
+        <div class="slide-footer">
+            <div class="float-left">KAYÜ - Mekatronik Bölümü</div>
+            <div class="float-right">Slayt 8 / 13</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <!-- SLAYT 9: SONUÇLAR VE KAZANIMLAR -->
+    <div class="slide">
+        <div class="slide-title">Proje Sonuçları & Gelecek Geliştirmeler</div>
+        <div class="table-layout">
+            <div class="table-row">
+                <div class="col-50">
+                    <h3 style="color:#ffd700; font-size:16pt; margin-bottom:4mm;">📈 Teknik Kazanımlar</h3>
+                    <div class="info-card" style="border-left-color: #10b981; padding: 4mm; margin-bottom: 3mm;">
+                        <p><strong>Hassas Zamanlama Kontrolü:</strong> Mikrosaniye bazlı harici kesme (interrupt) yönetimi ve donanımsal kilitlenmelerin aşılması deneyimi.</p>
+                    </div>
+                    <div class="info-card" style="border-left-color: #10b981; padding: 4mm; margin-bottom: 3mm;">
+                        <p><strong>Güç Kararlılığı:</strong> Ani yük çeken RGB LED gruplarında kararlı DC-DC step-up regülasyon mimarisi tasarımı.</p>
+                    </div>
+                    <div class="info-card" style="border-left-color: #10b981; padding: 4mm;">
+                        <p><strong>Mekatronik Optimizasyon:</strong> Merkezkaç kuvveti, çizgisel hız farkları ve mekanik balansın görüntü kararlılığına doğrudan etkisinin analizi.</p>
+                    </div>
+                </div>
+                <div class="col-50">
+                    <h3 style="color:#ffd700; font-size:16pt; margin-bottom:4mm;">🚀 Gelecek Planları</h3>
+                    <div class="info-card" style="padding: 4mm; margin-bottom: 3mm;">
+                        <p><strong>Bluetooth Entegrasyonu:</strong> HC-05 veya benzeri BLE modülü ile akıllı telefon üzerinden anlık metin ve renk paleti güncellemesi.</p>
+                    </div>
+                    <div class="info-card" style="padding: 4mm; margin-bottom: 3mm;">
+                        <p><strong>Özel Baskı Devre (PCB):</strong> Balansı bozmayan, motor miline tam oturan dairesel yapıda hafif bir kart tasarımı.</p>
+                    </div>
+                    <div class="info-card" style="padding: 4mm;">
+                        <p><strong>Gelişmiş Arayüz Desteği:</strong> PC tabanlı bir yazılımla resimleri (BMP/PNG) doğrudan LED matris dizilerine çeviren dönüştürücü arayüz.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="float-left">KAYÜ - Mekatronik Bölümü</div>
+            <div class="float-right">Slayt 9 / 13</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <!-- SLAYT 10: KOD BÖLÜM 1 -->
+    <div class="slide">
+        <div class="slide-title">Eksiksiz Kodlar - Bölüm 1: Tanımlamalar ve Setup</div>
+        <div class="table-layout">
+            <div class="table-row">
+                <div class="col-12" style="display:table-cell; width:100%;">
+                    <div class="code-window" style="height: 140mm; font-size: 8.5pt; overflow-y: scroll;">#include &lt;Adafruit_NeoPixel.h&gt;
+#include &lt;EEPROM.h&gt; // Kalıcı hafıza odasını kullanmak için gereken kütüphane
+
+#define LED_PIN        7
+#define NUMPIXELS     16
+#define HALL_PIN       2
+
+Adafruit_NeoPixel pixels(NUMPIXELS, LED_PIN, NEO_GRB + NEO_KHZ800);
+
+volatile unsigned long sonTurSuresi = 0;
+volatile unsigned long sonGecisZamani = 0;
+volatile bool yeniTurBasladi = false;
+
+// --- ÇOKLU DESEN MOD KONTROLÜ ---
+const byte TOPLAM_DESEN = 3; // Toplam 3 desenimiz var
+byte aktifMod = 0;
+const int eepromAdresi = 0; // Mod bilgisinin yazılacağı kalıcı hafıza hücresi
+
+// --- DESEN 1 (KAYÜ) DEĞİŞKENLERİ ---
+const byte harfler[4][5] = {
+  {0x3F, 0x81, 0x01, 0x81, 0x3F}, // Ü
+  {0xE0, 0x10, 0x0E, 0x10, 0xE0}, // Y
+  {0x7E, 0x88, 0x88, 0x88, 0x7E}, // A
+  {0x82, 0x44, 0x28, 0x10, 0xFE}  // K
+};
+uint32_t renkler[4];
+
+// --- DESEN 2 (3D VORTEX) DEĞİŞKENLERİ ---
+int frameCounter = 0; 
+const int toplamDilimVortex = 120; 
+
+// --- DESEN 3 (EKOLAYZIR) DEĞİŞKENLERİ ---
+const int toplamDilimEkolayzir = 12; 
+int sonCizilenDilim = -1;
+int mevcutYukseklik[6] = {5, 8, 12, 6, 14, 7};
+int hedefYukseklik[6] = {5, 8, 12, 6, 14, 7};
+unsigned long sonRitimGuncelleme = 0;
+const int ritmHizi = 35; 
+
+void setup() {
+  pixels.begin();
+  pixels.clear();
+  pixels.show();
+
+  pinMode(HALL_PIN, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(HALL_PIN), mknatisGecisi, FALLING);
+
+  aktifMod = EEPROM.read(eepromAdresi); // Son kaydedilen modu hafızadan çek
+  if (aktifMod >= TOPLAM_DESEN) {
+    aktifMod = 0; // Hafıza boş veya hatalıysa sıfırdan başla
+  }
+
+  byte sonrakiMod = (aktifMod + 1) % TOPLAM_DESEN;
+  EEPROM.write(eepromAdresi, sonrakiMod);
+
+  renkler[0] = pixels.Color(255, 255, 255); // Ü - Beyaz
+  renkler[1] = pixels.Color(0, 255, 255);   // Y - Turkuaz
+  renkler[2] = pixels.Color(255, 150, 0);   // A - Altın Sarısı
+  renkler[3] = pixels.Color(255, 0, 0);     // K - Kırmızı
+
+  randomSeed(analogRead(0));
+  sonRitimGuncelleme = millis();
+}</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="float-left">KAYÜ - Mekatronik Bölümü</div>
+            <div class="float-right">Slayt 10 / 13</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <!-- SLAYT 11: KOD BÖLÜM 2 -->
+    <div class="slide">
+        <div class="slide-title">Eksiksiz Kodlar - Bölüm 2: Loop ve KAYÜ Modu</div>
+        <div class="table-layout">
+            <div class="table-row">
+                <div class="col-12" style="display:table-cell; width:100%;">
+                    <div class="code-window" style="height: 140mm; font-size: 8.5pt; overflow-y: scroll;">void loop() {
+  // =========================================================================
+  // 🎯 DESEN 0: "KAYÜ" YAZDIRMA MODU (Orijinal Mantık)
+  // =========================================================================
+  if (aktifMod == 0) {
+    if (yeniTurBasladi) {
+      yeniTurBasladi = false;
+      
+      noInterrupts();
+      unsigned long turSuresi = sonTurSuresi;
+      interrupts();
+
+      if (turSuresi > 5000 && turSuresi < 2000000) { 
+        unsigned long sutunSuresi = turSuresi / 100; 
+        if (sutunSuresi &lt; 600) sutunSuresi = 600; 
+
+        guvenliDelayMicros(turSuresi / 4); // 90 derece konum gecikmesi
+
+        for (int h = 0; h &lt; 4; h++) {          
+          for (int s = 0; s &lt; 5; s++) {        
+            byte sutunVerisi = harfler[h][s];
+            pixels.clear();
+            for (int b = 0; b &lt; 8; b++) {
+              if ((sutunVerisi &gt;&gt; b) & 0x01) {
+                pixels.setPixelColor(7 - b, renkler[h]); 
+              }
+            }
+            pixels.show(); 
+            guvenliDelayMicros(sutunSuresi); 
+          }
+          pixels.clear();
+          pixels.show();
+          guvenliDelayMicros(sutunSuresi);
+        }
+        pixels.clear();
+        pixels.show();
+      }
+    }
+  }</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="float-left">KAYÜ - Mekatronik Bölümü</div>
+            <div class="float-right">Slayt 11 / 13</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <!-- SLAYT 12: KOD BÖLÜM 3 -->
+    <div class="slide">
+        <div class="slide-title">Eksiksiz Kodlar - Bölüm 3: Vortex ve Ekolayzır Modları</div>
+        <div class="table-layout">
+            <div class="table-row">
+                <div class="col-12" style="display:table-cell; width:100%;">
+                    <div class="code-window" style="height: 140mm; font-size: 8pt; overflow-y: scroll;">  // =========================================================================
+  // 🎯 DESEN 1: 3D VORTEX (GİRDAB) MODU
+  // =========================================================================
+  else if (aktifMod == 1) {
+    if (yeniTurBasladi) {
+      yeniTurBasladi = false;
+      
+      noInterrupts();
+      unsigned long turSuresi = sonTurSuresi;
+      interrupts();
+
+      if (turSuresi > 5000 && turSuresi < 2000000) { 
+        unsigned long dilimSuresi = turSuresi / toplamDilimVortex; 
+
+        frameCounter++;
+        if (frameCounter >= toplamDilimVortex) {
+          frameCounter = 0;
+        }
+
+        for (int sector = 0; sector < toplamDilimVortex; sector++) {        
+          unsigned long dilimBaslangici = micros();
+          pixels.clear();
+
+          int p1 = ((sector / 3) + frameCounter) % NUMPIXELS;
+          int p2 = ((sector / 3) + frameCounter + (NUMPIXELS / 2)) % NUMPIXELS;
+
+          pixels.setPixelColor(p1, pixels.Color(0, 255, 255));
+          pixels.setPixelColor((p1 + 1) % NUMPIXELS, pixels.Color(0, 150, 150)); 
+          pixels.setPixelColor(p2, pixels.Color(255, 0, 150));
+          pixels.setPixelColor((p2 + 1) % NUMPIXELS, pixels.Color(150, 0, 90));
+
+          pixels.show(); 
+          
+          long kalanVakit = dilimSuresi - (micros() - dilimBaslangici);
+          if (kalanVakit > 0) {
+            guvenliDelayMicros(kalanVakit); 
+          }
+        }
+      }
+    }
+  }
+
+  // =========================================================================
+  // 🎯 DESEN 2: KESİNTİSİZ DİJİTAL EKOLAYZIR MODU
+  // =========================================================================
+  else if (aktifMod == 2) {
+    unsigned long simdi = millis();
+
+    // --- ARKA PLAN RİTİM MOTORU ---
+    if (simdi - sonRitimGuncelleme >= ritmHizi) {
+      sonRitimGuncelleme = simdi;
+      for (int k = 0; k < 6; k++) {
+        if (mevcutYukseklik[k] == hedefYukseklik[k]) {
+          hedefYukseklik[k] = random(2, 17); 
+        }
+        if (mevcutYukseklik[k] < hedefYukseklik[k]) {
+          mevcutYukseklik[k]++;
+        } else {
+          mevcutYukseklik[k]--;
+        }
+      }
+    }
+
+    noInterrupts();
+    unsigned long gecerliTurSuresi = sonTurSuresi;
+    unsigned long gecerliGecisZamani = sonGecisZamani;
+    interrupts();
+
+    if (gecerliTurSuresi < 6000 || gecerliTurSuresi > 2000000) {
+      pixels.clear();
+      pixels.setPixelColor(0, pixels.Color(0, 100, 255));
+      pixels.show();
+      return; 
+    }
+
+    unsigned long dilimSuresi = gecerliTurSuresi / toplamDilimEkolayzir; 
+    unsigned long gecenSure = micros() - gecerliGecisZamani;
+    int gecerliDilim = gecenSure / dilimSuresi;
+
+    if (gecerliDilim < toplamDilimEkolayzir && gecerliDilim != sonCizilenDilim) {
+      sonCizilenDilim = gecerliDilim;
+      pixels.clear();
+
+      if ((gecerliDilim % 2) == 0) {
+        int kanalIndex = gecerliDilim / 2; 
+        int yukseklik = mevcutYukseklik[kanalIndex];
+        
+        for (int h = 0; h < yukseklik; h++) {
+          int ledIndex = 15 - h; 
+          
+          uint32_t ledRengi;
+          if (ledIndex >= 11) {
+            ledRengi = pixels.Color(0, 200, 0);   // Yeşil
+          } else if (ledIndex >= 5) {
+            ledRengi = pixels.Color(200, 90, 0);   // Turuncu
+          } else {
+            ledRengi = pixels.Color(255, 0, 0);    // Kırmızı
+          }
+          pixels.setPixelColor(ledIndex, ledRengi);
+        }
+      }
+      pixels.show(); 
+    }
+  }
+}</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="float-left">KAYÜ - Mekatronik Bölümü</div>
+            <div class="float-right">Slayt 12 / 13</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <!-- SLAYT 13: KOD BÖLÜM 4 -->
+    <div class="slide">
+        <div class="slide-title">Eksiksiz Kodlar - Bölüm 4: Alt Fonksiyonlar</div>
+        <div class="table-layout">
+            <div class="table-row">
+                <div class="col-12" style="display:table-cell; width:100%;">
+                    <div class="code-window" style="height: 140mm; font-size: 8.5pt; overflow-y: scroll;">// Zamanlama fonksiyonu
+void guvenliDelayMicros(unsigned long us) {
+  if (us >= 1000) {
+    delay(us / 1000);
+    us = us % 1000;
+  }
+  if (us > 0) {
+    delayMicroseconds(us);
+  }
+}
+
+// Ortak Yüksek Hızlı Hall Sensör Kesmesi
+void mknatisGecisi() {
+  unsigned long simdi = micros();
+  // Tüm modların en verimli çalışacağı fırçasız motor filtresi (2000 us) sabitleştirildi
+  if (simdi - sonGecisZamani > 2000) {
+    sonTurSuresi = simdi - sonGecisZamani;
+    sonGecisZamani = simdi;
+    yeniTurBasladi = true;
+    sonCizilenDilim = -1; // Ekolayzır modu geçiş senkronizasyonu için taze tutulur
+  }
+}</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="float-left">KAYÜ - Mekatronik Bölümü</div>
+            <div class="float-right">Slayt 13 / 13</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+</body>
+</html>
